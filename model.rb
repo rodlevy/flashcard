@@ -4,36 +4,28 @@ require 'pry'
 
 class Card
   attr_reader :answer, :definition
-  def initialize(answer, definition, attempts = 0)
+  def initialize(answer, definition)
     @answer = answer
     @definition = definition
-    @attempts = attemps
   end
 
   def to_s
     "#{definition}: #{answer}"
   end
-  
-  def correct?(guess)
-    guess == answer
-  end
 
-  def attempted!
-    @attempts += 1
+  def correct?(input)
+    input == answer
   end
-
 end
 
 class Deck
 
-  attr_reader :false_deck, :true_deck, :working_deck, :current_card
-
+  attr_reader :false_deck, :true_deck, :working_deck
   def initialize(file_name)
     @false_deck = []
     @true_deck = []
     @working_deck = []
     load(file_name)
-    set_current_card
   end
 
   def load(file_name)
@@ -50,25 +42,14 @@ class Deck
     @working_deck.shuffle!
   end
 
-  def sort!
-    @working_deck.sort_by { |card| card.attempts }.reverse
-  end
-
   def guess(guess)
-    @current_card.attempted!
-    if @current_card.correct?(guess)
-      @true_deck << @current_card
-      set_current_card
+    if @working_deck[0].correct?(guess)
+      @true_deck << @working_deck.shift
       true
     else
-      @false_deck << @current_card
-      set_current_card
+      @false_deck << @working_deck.shift
       false
     end
-  end
-
-  def set_current_card
-    @current_card = @working_deck.shift
   end
 
   def finished?
@@ -83,15 +64,10 @@ class Deck
     @working_deck << @false_deck
     @false_deck = []
     @working_deck.flatten!
-    set_current_card
   end
 
   def next_card
-    @current_card.definition
-  end
-  
-  def next_card_answer
-    @false_deck.last.answer
+    @working_deck[0].definition
   end
 
   def num_correct
@@ -103,5 +79,4 @@ class Deck
   end
 
 end
-
 
