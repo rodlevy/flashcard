@@ -1,14 +1,13 @@
-require 'model.rb'
-require 'flashcard_samples.txt'
+require_relative 'model.rb'
 class Controller
 
-  def initialize()
-    create_new_deck
+  def initialize(file)
+    create_new_deck(file)
     user_interface
   end
 
-  def create_new_deck
-    @new_deck = Deck.new
+  def create_new_deck(file)
+    @new_deck = Deck.new(file)
     @new_deck.shuffle!
   end
 
@@ -16,15 +15,21 @@ class Controller
     @view = View.new
     @view.welcome_prompt
     sleep 2
-    display_definition(@new_deck.working_array[0])
+    run_game
   end
 
   def display_definition(card)
-    @view.display_definition(card.definition)
+    @view.display_definition(card)
   end
   
   def user_guess
     @view.get_guess
+  end
+  def run_game
+    until @new_deck.deck_empty?
+          display_definition(@new_deck.next_card)
+          user_guess
+        end
   end
 
 
@@ -60,6 +65,7 @@ class View
   end
   
   def get_guess
+    puts "Guess:"
     @guess = gets.chomp
   end
 
@@ -68,7 +74,9 @@ class View
   end
 
   def display_definition(card_definition)
-    @card_definition
+   puts "Definition: \n#{card_definition}"
   end
 
 end
+
+test = Controller.new('flashcard_samples.txt')
