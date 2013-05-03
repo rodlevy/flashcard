@@ -47,11 +47,11 @@ class Deck
   end
 
   def deck_finished?
-    @working_array = []
-  end
+    @working_array.empty?
+  endx
 
   def deck_empty?
-    @working_array.empty?
+    @false_array.empty? && @working_array.empty?
   end
 
   def start_over!
@@ -59,6 +59,19 @@ class Deck
       @working_array << @false_array.shift
     end
   end
+
+  def next_card
+    @working_array[0].definition
+  end
+
+  def num_correct
+    @true_array.length
+  end
+
+  def num_wrong
+    @false_array.length
+  end
+
 
 end
 
