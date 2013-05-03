@@ -13,11 +13,15 @@ class Card
     "#{definition}: #{answer}"
   end
 
+  # def correct?(term)
+  #   @answer == term
+  # end
 end
 
 class Deck
 
-  attr_reader :false_array, :true_array, :working_array
+  # attr_reader :false_array, :true_array, :working_array
+
   def initialize(file_name)
     @false_array = []
     @true_array = []
@@ -47,6 +51,16 @@ class Deck
       @false_array << @working_array.shift
       false
     end
+
+    set_current_card(@working_array.shift)
+  end
+
+  def set_current_card(card)
+    @current_card = card
+  end
+
+  def current_card
+    @current_card
   end
 
   def correct?(guess)
@@ -83,6 +97,9 @@ class Deck
     @false_array.length
   end
 
+private
+
+  attr_reader :true_deck, :false_deck, :working_deck
 
 end
 

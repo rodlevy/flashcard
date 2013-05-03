@@ -1,5 +1,6 @@
 require_relative 'model.rb'
 require 'colorize'
+
 class Controller
 
   def initialize(file)
@@ -26,55 +27,36 @@ class Controller
   def user_guess
     @new_deck.guess(@view.get_guess)
   end
+
   def run_game
     until @new_deck.finished?
-          display_definition(@new_deck.next_card)
-          if user_guess 
-            puts "Katie Perry now sits on your lap!".green
-            puts
-          else
-            puts "Incorrect: Please consult with KT Perry".red 
-            puts "Answer: #{@new_deck.next_card_answer}".red
-            puts 
-          end
-        end
-     puts "Correct: #{@new_deck.num_correct}"
-     puts "Incorrect: #{@new_deck.num_wrong}\n"
-     if @new_deck.empty?
+      @view.display_definition(@new_deck.next_card)
+      if user_guess
+        puts "Katie Perry now sits on your lap!".green
+        puts
+      else
+        puts "Incorrect: Please consult with KT Perry".red
+        puts "Answer: #{@new_deck.next_card_answer}".red
+        puts 
+      end
+    end
+
+    puts "Correct: #{@new_deck.num_correct}"
+    puts "Incorrect: #{@new_deck.num_wrong}\n"
+
+    if @new_deck.empty?
       puts "You are the biggest winner!!"
     else
-     puts "Do you want to finish your previous mistakes?"
-     try_again = gets.chomp
-     if try_again == "yes"
-      @new_deck.start_over!.shuffle!
-      run_game
+      puts "Do you want to finish your previous mistakes?"
+      try_again = gets.chomp
+      if try_again == "yes"
+        @new_deck.start_over!.shuffle!
+        run_game
       else
         puts "you loser"
       end
     end
-
-
   end
-
-
-=begin 
-Controller 
-deck.shuffle
-next_card 
-get input - guess 
-card.correct?
-if true push to true array from false array
-  next card
-elsif false loop to check card
-check for deck finished?
-check if deck is empty?
-  if empty 
-    startagain?
-  if cards loop through remaining false array.
-=end 
-  
-
-
 end
 
 class View
