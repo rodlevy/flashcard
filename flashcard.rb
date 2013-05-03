@@ -1,3 +1,5 @@
+require 'model.rb'
+require 'flashcard_samples.txt'
 class Controller
 
   def initialize()
@@ -7,11 +9,14 @@ class Controller
 
   def create_new_deck
     @new_deck = Deck.new
+    @new_deck.shuffle!
   end
 
   def user_interface
     @view = View.new
     @view.welcome_prompt
+    sleep 2
+    display_definition(@new_deck.working_array[0])
   end
 
   def display_definition(card)
@@ -22,9 +27,10 @@ class Controller
     @view.get_guess
   end
 
-  
+
 =begin 
 Controller 
+deck.shuffle
 next_card 
 get input - guess 
 card.correct?
