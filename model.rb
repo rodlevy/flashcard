@@ -46,13 +46,19 @@ class Deck
     guess.downcase == card.answer.downcase
   end
 
+  def deck_finished?
+    @working_array = []
+  end
+
   def deck_empty?
     @working_array.empty?
   end
 
-  def 
+  def start_over!
+    @false_array.each do |card|
+      @working_array << @false_array.shift
+    end
   end
-
 
 end
 
