@@ -23,12 +23,13 @@ class Controller
   end
   
   def user_guess
-    @view.get_guess
+    @new_deck.guess(@view.get_guess)
   end
   def run_game
     until @new_deck.deck_empty?
           display_definition(@new_deck.next_card)
           user_guess
+          # @new_deck.guess(@view.get_guess)
         end
   end
 
