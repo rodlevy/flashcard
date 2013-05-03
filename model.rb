@@ -83,6 +83,10 @@ class Deck
     @working_deck[0].definition
   end
 
+  def next_card_answer
+    @false_deck.last.answer
+  end
+
   def num_correct
     @true_deck.length
   end
