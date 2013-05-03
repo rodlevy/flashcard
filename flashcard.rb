@@ -26,13 +26,18 @@ class Controller
 
   def run_game
     until @new_deck.finished?
+      counter = 0 
       @view.display_definition(@new_deck.next_card)
-      if user_guess
-        @view.correct_answer
-      else
-        @view.incorrect_answer(@new_deck.next_card_answer)      
+        until counter == 2
+        if user_guess
+          counter ==2
+          @view.correct_answer
+        else
+          counter += 1
+          @view.incorrect_answer(@new_deck.next_card_answer) if counter == 2
+        end
       end
-    end
+      end
     guess_count
   end
   
@@ -48,13 +53,14 @@ class Controller
   
   def again?
     play_again = gets.chomp
-      if play_again == "yes"
-        @new_deck.start_over!.shuffle!
-        run_game
-      else
-        @view.exit_prompt
-      end
+    if play_again == "yes"
+      @new_deck.start_over!
+      @new_deck.sort!
+      run_game
+    else
+      @view.exit_prompt
     end
+  end
 
 end
 
@@ -80,33 +86,33 @@ class View
 
   def display_definition(card_definition)
    puts "Definition: \n#{card_definition}".blue
-  end
+ end
 
-  def correct_answer
-    puts "Katie Perry now sits on your lap!".green
-  end
+ def correct_answer
+  puts "Katie Perry now sits on your lap!".green
+end
 
-  def incorrect_answer(answer)
-    puts "Incorrect: Please consult with KT Perry".red
-    puts "Answer: #{answer}".red
-  end
+def incorrect_answer(answer)
+  puts "Incorrect: Please consult with KT Perry".red
+  puts "Answer: #{answer}".red
+end
 
-  def correct_and_incorrect_count(correct,incorrect)
-    puts "Correct: #{correct}"
-    puts "Incorrect: #{incorrect}\n"
-  end
+def correct_and_incorrect_count(correct,incorrect)
+  puts "Correct: #{correct}"
+  puts "Incorrect: #{incorrect}\n"
+end
 
-  def empty_wrong_answers
-    puts "You are the biggest winner!!"
-  end
+def empty_wrong_answers
+  puts "You are the biggest winner!!"
+end
 
-  def play_again?
-    puts "Do you want to finish your previous mistakes?"
-  end
+def play_again?
+  puts "Do you want to finish your previous mistakes?"
+end
 
-  def exit_prompt
-    puts "you loser"
-  end  
+def exit_prompt
+  puts "you loser"
+end  
 end
 
 test = Controller.new('test_flash.txt')
