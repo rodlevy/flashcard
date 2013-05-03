@@ -8,9 +8,16 @@ class Card
     @answer = answer
     @definition = definition
   end
+
+  def to_s
+    "#{definition}: #{answer}"
+  end
+
 end
 
 class Deck
+
+  attr_reader :false_array, :true_array, :working_array
   def initialize(file_name)
     @false_array = []
     @true_array = []
@@ -33,7 +40,7 @@ class Deck
   end
 
   def guess(guess)
-    if guess.correct?
+    if correct?(guess)
       @true_array << @working_array.shift
       true
     else
@@ -43,21 +50,21 @@ class Deck
   end
 
   def correct?(guess)
-    guess.downcase == card.answer.downcase
+    guess.downcase == @working_array[0].answer.downcase
   end
 
-  def deck_finished?
+  def finished?
     @working_array.empty?
-  endx
+  end
 
-  def deck_empty?
+  def empty?
     @false_array.empty? && @working_array.empty?
   end
 
   def start_over!
-    @false_array.each do |card|
-      @working_array << @false_array.shift
-    end
+    @working_array << @false_array
+    @false_array = []
+    @working_array.flatten!
   end
 
   def next_card
@@ -75,9 +82,4 @@ class Deck
 
 end
 
-
-
-deck = Deck.new('flashcard_samples.txt')
-
-deck
 
