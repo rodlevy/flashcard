@@ -55,17 +55,15 @@ class Deck
 
   def guess(guess)
     @working_deck[0].attempted!
-    @working_deck[0].correct?(guess) ? guess_correct : guess_incorrect
+    @working_deck[0].correct?(guess)
   end
 
   def guess_correct
     @true_deck << @working_deck.shift
-    true
   end
   
   def guess_incorrect
-    @true_deck << @working_deck.shift
-    false
+    @false_deck << @working_deck.shift
   end
 
 
@@ -87,8 +85,8 @@ class Deck
     @working_deck[0].definition
   end
 
-  def next_card_answer
-    @false_deck.last.answer
+  def card_answer
+    @working_deck[0].answer
   end
 
   def num_correct

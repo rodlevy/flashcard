@@ -4,8 +4,9 @@ require 'colorize'
 class Controller
 
   def initialize(file)
-    create_new_deck(file)
     user_interface
+    create_new_deck(@view.get_file_name)
+    run_game
   end
 
   def create_new_deck(file)
@@ -17,7 +18,7 @@ class Controller
     @view = View.new
     @view.welcome_prompt
     sleep 2
-    run_game
+    
   end
   
   def user_guess
@@ -30,10 +31,16 @@ class Controller
       @view.display_definition(@new_deck.next_card)
         if user_guess
           @view.correct_answer
+          @new_deck.guess_correct
         else
           puts "You guessed wrong! Try again.".red
-          user_guess
-          @view.incorrect_answer(@new_deck.next_card_answer) 
+          if user_guess
+            @view.correct_answer
+            @new_deck.guess_correct
+          else
+            @view.incorrect_answer(@new_deck.card_answer) 
+            @new_deck.guess_incorrect
+          end
         end
       end
     guess_count
@@ -53,7 +60,7 @@ class Controller
     play_again = gets.chomp
     if play_again == "yes"
       @new_deck.start_over!
-      @new_deck.shuffle!
+      @new_deck.sort!
       run_game
     else
       @view.exit_prompt
@@ -64,15 +71,16 @@ end
 
 class View
 
-  def initialize
-
-
-  end
-
   def new_card
     @new_card
   end
   
+  def get_file_name
+    puts "Flash card file to load (test_flash.txt) is the default"
+    input =  gets.chomp
+    input.empty? ? 'test_flash.txt' : input
+  end
+
   def get_guess
     puts "Guess:"
     @guess = gets.chomp
