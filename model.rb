@@ -49,6 +49,10 @@ class Deck
     @working_deck.shuffle!
   end
 
+  def sort!
+    @working_deck.shuffle!.sort_by { |card| card.attempts }.reverse
+  end
+
   def guess(guess)
     @working_deck[0].attempted!
     @working_deck[0].correct?(guess) ? guess_correct : guess_incorrect
