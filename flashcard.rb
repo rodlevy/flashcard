@@ -28,15 +28,13 @@ class Controller
     until @new_deck.finished?
       counter = 0 
       @view.display_definition(@new_deck.next_card)
-        until counter == 2
         if user_guess
-          counter ==2
           @view.correct_answer
         else
-          counter += 1
-          @view.incorrect_answer(@new_deck.next_card_answer) if counter == 2
+          puts "You guessed wrong! Try again.".red
+          user_guess
+          @view.incorrect_answer(@new_deck.next_card_answer) 
         end
-      end
       end
     guess_count
   end
@@ -55,7 +53,7 @@ class Controller
     play_again = gets.chomp
     if play_again == "yes"
       @new_deck.start_over!
-      @new_deck.sort!
+      @new_deck.shuffle!
       run_game
     else
       @view.exit_prompt
