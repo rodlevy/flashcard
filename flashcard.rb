@@ -19,10 +19,6 @@ class Controller
     sleep 2
     run_game
   end
-
-  def display_definition(card)
-    @view.display_definition(card)
-  end
   
   def user_guess
     @new_deck.guess(@view.get_guess)
@@ -32,31 +28,34 @@ class Controller
     until @new_deck.finished?
       @view.display_definition(@new_deck.next_card)
       if user_guess
-        puts "Katie Perry now sits on your lap!".green
-        puts
+        @view.correct_answer
       else
-        puts "Incorrect: Please consult with KT Perry".red
-        puts "Answer: #{@new_deck.next_card_answer}".red
-        puts 
+        @view.incorrect_answer(@new_deck.next_card_answer)      
       end
     end
-
-    puts "Correct: #{@new_deck.num_correct}"
-    puts "Incorrect: #{@new_deck.num_wrong}\n"
-
+    guess_count
+  end
+  
+  def guess_count
+    @view.correct_and_incorrect_count(@new_deck.num_correct,@new_deck.num_wrong)
     if @new_deck.empty?
-      puts "You are the biggest winner!!"
+      @view.empty_wrong_answers
     else
-      puts "Do you want to finish your previous mistakes?"
-      try_again = gets.chomp
-      if try_again == "yes"
+      @view.play_again?
+      again?
+    end
+  end
+  
+  def again?
+    play_again = gets.chomp
+      if play_again == "yes"
         @new_deck.start_over!.shuffle!
         run_game
       else
-        puts "you loser"
+        @view.exit_prompt
       end
     end
-  end
+
 end
 
 class View
@@ -83,6 +82,31 @@ class View
    puts "Definition: \n#{card_definition}".blue
   end
 
+  def correct_answer
+    puts "Katie Perry now sits on your lap!".green
+  end
+
+  def incorrect_answer(answer)
+    puts "Incorrect: Please consult with KT Perry".red
+    puts "Answer: #{answer}".red
+  end
+
+  def correct_and_incorrect_count(correct,incorrect)
+    puts "Correct: #{correct}"
+    puts "Incorrect: #{incorrect}\n"
+  end
+
+  def empty_wrong_answers
+    puts "You are the biggest winner!!"
+  end
+
+  def play_again?
+    puts "Do you want to finish your previous mistakes?"
+  end
+
+  def exit_prompt
+    puts "you loser"
+  end  
 end
 
 test = Controller.new('test_flash.txt')
