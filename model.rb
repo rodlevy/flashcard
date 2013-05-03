@@ -3,10 +3,12 @@ require 'pry'
 
 
 class Card
-  attr_reader :answer, :definition
-  def initialize(answer, definition)
+  attr_reader :answer, :definition, :attempts
+  
+  def initialize(answer, definition, attempts = 0)
     @answer = answer
     @definition = definition
+    @attempts = attempts
   end
 
   def to_s
@@ -16,6 +18,11 @@ class Card
   def correct?(input)
     input == answer
   end
+
+  def attempted!
+    @attempts += 1
+  end
+
 end
 
 class Deck
@@ -43,14 +50,20 @@ class Deck
   end
 
   def guess(guess)
-    if @working_deck[0].correct?(guess)
-      @true_deck << @working_deck.shift
-      true
-    else
-      @false_deck << @working_deck.shift
-      false
-    end
+    @working_deck[0].attempted!
+    @working_deck[0].correct?(guess) ? guess_correct : guess_incorrect
   end
+
+  def guess_correct
+    @true_deck << @working_deck.shift
+    true
+  end
+  
+  def guess_incorrect
+    @true_deck << @working_deck.shift
+    false
+  end
+
 
   def finished?
     @working_deck.empty?
