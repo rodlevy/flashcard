@@ -1,4 +1,5 @@
 require_relative 'model.rb'
+require 'colorize'
 class Controller
 
   def initialize(file)
@@ -26,11 +27,33 @@ class Controller
     @new_deck.guess(@view.get_guess)
   end
   def run_game
-    until @new_deck.deck_empty?
+    until @new_deck.finished?
           display_definition(@new_deck.next_card)
-          user_guess
-          # @new_deck.guess(@view.get_guess)
+          if user_guess 
+            puts "Katie Perry now sits on your lap!".green
+            puts
+          else
+            puts "Incorrect: Please consult with KT Perry".red 
+            puts "Answer: #{@new_deck.next_card_answer}".red
+            puts 
+          end
         end
+     puts "Correct: #{@new_deck.num_correct}"
+     puts "Incorrect: #{@new_deck.num_wrong}\n"
+     if @new_deck.empty?
+      puts "You are the biggest winner!!"
+    else
+     puts "Do you want to finish your previous mistakes?"
+     try_again = gets.chomp
+     if try_again == "yes"
+      @new_deck.start_over!.shuffle!
+      run_game
+      else
+        puts "you loser"
+      end
+    end
+
+
   end
 
 
@@ -71,13 +94,13 @@ class View
   end
 
   def welcome_prompt
-    puts "Welcome to Ruby Flashcards"
+    puts "Welcome to Ruby Flashcards".yellow
   end
 
   def display_definition(card_definition)
-   puts "Definition: \n#{card_definition}"
+   puts "Definition: \n#{card_definition}".blue
   end
 
 end
 
-test = Controller.new('flashcard_samples.txt')
+test = Controller.new('test_flash.txt')

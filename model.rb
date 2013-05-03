@@ -70,6 +70,10 @@ class Deck
   def next_card
     @working_array[0].definition
   end
+  
+  def next_card_answer
+    @false_array.last.answer
+  end
 
   def num_correct
     @true_array.length
